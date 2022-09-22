@@ -1,5 +1,8 @@
 ﻿#include <iostream>
+#include <fstream>
+#include <string>
 using namespace std;
+
 struct Pipe
 {
 	float lenght = 0, diameter = 0;
@@ -13,11 +16,42 @@ struct ComSt
 	float effeciency = 0; 
 };
 
-void f(int i) {
-	cout << "Error!!! Input numeric value" << endl;
-	cin.clear();
-	cin.ignore(INT_MAX, '\n');
-	cin >> i;
+void error(int i) { 
+	while ((!i)|| (i<=0)) {
+		cout << "Error!!! Input numeric value" << endl;
+		cin.clear();
+		cin.ignore(INT_MAX, '\n');
+		cin >> i;
+	}
+}
+
+string status(int x) {
+	if (x == 2)
+		return ("Pipe works");
+	else if (x == 1)
+		return ("Pipe is repairing");
+	else
+		return ("Unknown");
+}
+
+int status_cin(int x){
+	while ((x > 2) || (!x) || (x <= 0)) {
+		cout << "Error!!! Input numeric value" << endl;
+		cin.clear();
+		cin.ignore(INT_MAX, '\n');
+		cin >> x;
+	}
+	return x;
+}
+
+int workshop_cin(int x, int y) {
+	while ((x > y) || (!x) || (x <= 0)) {
+		cout << "Error!!! Input numeric value" << endl;
+		cin.clear();
+		cin.ignore(INT_MAX, '\n');
+		cin >> x;
+	}
+	return x;
 }
 
 int main()
@@ -27,39 +61,68 @@ int main()
 	ComSt cs;
 
 	while (option) {
-		cout << "\nChoose Option:\n 1.Add pipe 2. Add compressor station 3.View all objets 4. Edit pipe 5. Edit Comressor Station 6. Save 7. Load 0. Exit\n";
+		cout << "\nChoose Option:\n 1.Add pipe 2. Add compressor station 3.View all objects 4. Edit pipe 5. Edit Comressor Station 6. Save 7. Load 0. Exit\n";
 		cin >> option;
-		if (option == 1) {
-			cout << "\nInput lenght ";
+		switch (option) {
+		case 1: {
+			cout << "\nInput lenght";
 			cin >> p.lenght;
-			if (!p.lenght) {
-				do {
-					f(p.lenght);
-				} while (!p.lenght);
-			}
-			cout << "\nInput diameter ";
+			error(int(p.lenght));
+			cout << "\nInput diameter";
 			cin >> p.diameter;
-			if (!p.diameter) {
-				do {
-					f(p.diameter);
-				} while (!p.diameter);
-
-			}
-			cout << "\nInput status of pipe (1-repairing, 2-working)";
+			error(int(p.diameter));
+			cout << "\nChoose status of pipe(1-if repairing, 2 if works)";
 			cin >> p.status;
-			if ((p.status > 2) || (p.status < 0) || (!p.status)) {
-				do {
-					f(p.status);
-				} while ((p.status > 2) || (p.status < 0) || (!p.status));
+			p.status = status_cin(p.status);
+			cout << status(p.status) << endl;
+			break;
+		}
+		case 2: {
+			cout << "\nInput name";
+			cin >> cs.name;
+			cout << "\nNumber_of_workshop";
+			cin >> cs.workshop;
+			cout << "\nNumber_of_Working_workshop";
+			cin >> cs.working_ws;
+			cs.working_ws = workshop_cin(cs.working_ws, cs.workshop);
+			cs.effeciency = float(cs.working_ws) / float(cs.workshop) * 100;
+			cout << "\nEffeciency:" << cs.effeciency << "%" << endl;
+			break;
+		}
+		case 3: {
+			cout << "\nPipe info:\nLenght: " << p.lenght << "\nDiameter:" << p.diameter
+				<< "\nStatus:" << status(p.status) << endl;
+			cout << "\nComressor Station info:\nName: " << cs.name << "\nNumber of workshops: " << cs.workshop
+				<< "\nNumber of working workshops: " << cs.working_ws << "\nEfficiency: " << cs.effeciency << "%" << endl;
+			break;
+
+		}
+		case 4: {
+			if (p.status == -1)
+				cout << "\nTHere is no pipe to edit" << endl;
+			else {
+				cout << "\nInput new status of pipe (1-repairing, 2-working)" << endl;
+				cin >> p.status;
+				p.status = status_cin(p.status);
+				cout << status(p.status) << endl;
+			}
+			break;
+		}
+		case 5: {
+			if (cs.working_ws == -1)
+				cout << "\nThere is Compressor Station to edit" << endl;
+			else {
+				cout << "\nInput number of working workshops: " << endl;
+				cin >> cs.working_ws;
+				cs.working_ws = workshop_cin(cs.working_ws, cs.workshop);
+				cs.effeciency = float(cs.working_ws) / float(cs.workshop) * 100;
+				cout << "\nEfficiency " << cs.effeciency << "%" << endl;
 
 			}
-		}		if (p.status == 1) {
-			cout << "\nPipe is repairing\n" << endl;
+		
 		}
-		else {
-			cout << "\nPipe is working\n" << endl;
 		}
-
 	}
+	
 }
 
