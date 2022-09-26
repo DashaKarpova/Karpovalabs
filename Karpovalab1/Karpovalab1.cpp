@@ -13,7 +13,7 @@ struct Pipe
 struct ComSt
 {
 	string name = "";
-	int workshop = 0, working_ws = -1, change_comst = 0; 
+	double workshop = 0, working_ws = -1, change_comst = 0; 
 	float effeciency = 0; 
 };
 
@@ -56,6 +56,16 @@ int workshop_cin(int x, int y) {
 	return x;
 }
 
+double integervalue(double x) {
+	while (x / trunc(x) != 1) {
+		cout << "Error!!! Input integer value" << endl;
+		cin.clear();
+		cin.ignore(INT_MAX, '\n');
+		cin >> x;
+	}
+	return x;
+}
+
 void Addpipe(Pipe& p)
 {
 	cout << "\nInput lenght";
@@ -75,8 +85,10 @@ void AddCS(ComSt& cs) {
 	cin >> cs.name;
 	cout << "\nNumber_of_workshop";
 	cin >> cs.workshop;
+	cs.workshop = integervalue(cs.workshop);
 	cout << "\nNumber_of_Working_workshop";
 	cin >> cs.working_ws;
+	cs.working_ws = integervalue(cs.working_ws);
 	cs.working_ws = workshop_cin(cs.working_ws, cs.workshop);
 	cs.effeciency = float(cs.working_ws) / float(cs.workshop) * 100;
 	cout << "\nEffeciency:" << cs.effeciency << "%" << endl;
@@ -106,6 +118,7 @@ void EditCS(ComSt& cs) {
 	else {
 		cout << "\nInput number of working workshops: " << endl;
 		cin >> cs.working_ws;
+		cs.working_ws = integervalue(cs.working_ws);
 		cs.working_ws = workshop_cin(cs.working_ws, cs.workshop);
 		cs.effeciency = float(cs.working_ws) / float(cs.workshop) * 100;
 		cout << "\nEfficiency " << cs.effeciency << "%" << endl;
