@@ -21,7 +21,7 @@ struct ComSt
 //ошибка при вводе значений
 float error(float i) { 
 	while ((((cin>>i).fail())||(cin.peek() != '\n'))||(i<=0)) {
-		cout << "Error!!! Input numeric value>0" << endl;
+		cout << "Error!!! Input numeric value without gap" << endl;
 		cin.clear();
 		cin.ignore(INT_MAX, '\n');
 		
@@ -83,7 +83,7 @@ void Addpipe(Pipe& p)
 	p.lenght=error(p.lenght);
 	cout << "\nInput diameter";
 	p.diameter = error(p.diameter);
-	cout << "\nChoose status of pipe(1-if repairing, 2 if works)";
+	cout << "\nChoose status of pipe(0 if repairing, 1 if works)";
 	p.status = status_cin(p.status);
 	 status(p.status);
 }
@@ -123,7 +123,6 @@ void EditCS(ComSt& cs) {
 		cout << "\nThere is Compressor Station to edit" << endl;
 	else {
 		cout << "\nInput number of working workshops: " << endl;
-		cs.working_ws = integervalue(cs.working_ws);
 		cs.working_ws = workshop_cin(cs.working_ws, cs.workshop);
 		cs.effeciency = float(cs.working_ws) / float(cs.workshop) * 100;
 		cout << "\nEfficiency " << cs.effeciency << "%" << endl;
