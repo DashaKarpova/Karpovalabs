@@ -109,11 +109,10 @@ void Viewall(Pipe& p, ComSt& cs) {
 }
 
 void Editpipe(Pipe& p) {
-	if (p.status == -1)
+	if (p.status==-1)
 		cout << "\nTHere is no pipe to edit" << endl;
 	else {
-		cout << "\nInput new status of pipe (1-repairing, 2-working)" << endl;
-		cin >> p.status;
+		cout << "\nInput new status of pipe (0-repairing, 1-working)" << endl;
 		p.status = status_cin(p.status);
 		status(p.status);
 	}
@@ -124,7 +123,6 @@ void EditCS(ComSt& cs) {
 		cout << "\nThere is Compressor Station to edit" << endl;
 	else {
 		cout << "\nInput number of working workshops: " << endl;
-		cin >> cs.working_ws;
 		cs.working_ws = integervalue(cs.working_ws);
 		cs.working_ws = workshop_cin(cs.working_ws, cs.workshop);
 		cs.effeciency = float(cs.working_ws) / float(cs.workshop) * 100;
