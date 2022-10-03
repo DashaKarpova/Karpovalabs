@@ -85,7 +85,6 @@ void Addpipe(Pipe& p)
 	p.diameter = error(p.diameter);
 	cout << "\nChoose status of pipe(1-if repairing, 2 if works)";
 	p.status = status_cin(p.status);
-	//status(p.status);
 	 status(p.status);
 }
 
@@ -97,7 +96,6 @@ void AddCS(ComSt& cs) {
 	cout << "\nNumber_of_workshop";
 	cs.workshop = integervalue(cs.workshop);
 	cout << "\nNumber_of_Working_workshop";
-	cs.working_ws = integervalue(cs.working_ws);
 	cs.working_ws = workshop_cin(cs.working_ws, cs.workshop);
 	cs.effeciency = float(cs.working_ws) / float(cs.workshop) * 100;
 	cout << "\nEffeciency:" << cs.effeciency << "%" << endl;
