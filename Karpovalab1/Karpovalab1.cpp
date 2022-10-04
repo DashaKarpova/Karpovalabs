@@ -19,7 +19,7 @@ struct ComSt
 };
 
 //ошибка при вводе значений
-float error() { 
+float checkfloatvalue() { 
 	float i;
 	while ((((cin>>i).fail())||(cin.peek() != '\n'))||(i<=0)) {
 		cout << "Error!!! Input numeric value without gap" << endl;
@@ -41,14 +41,14 @@ int check_option() {
 	return x;
 }
 //проверка статуса
-void status(bool status) {
+void outputstatus(bool status) {
 	if (status == true)
 		cout<<"\nPipe works";
 	else 
 		cout<<"\nPipe is repairing";
 }
 
-bool status_cin() {
+bool status() {
 	bool checkstatus;
 	while (((cin >> checkstatus).fail()) || (cin.peek() != '\n'))
 	{
@@ -62,7 +62,7 @@ bool status_cin() {
 //Проверка цехов
 int integervalue() {
 	int x;
-	while ((((cin >> x).fail()) || (cin.peek() != '\n')) ||(x / trunc(x) != 1)||(x<=0)) {
+	while ((((cin >> x).fail()) || (cin.peek() != '\n'))||(x<=0)) {
 		cout << "Error!!! Input integer value" << endl;
 		cin.clear();
 		cin.ignore(INT_MAX, '\n');
@@ -85,12 +85,12 @@ int workshop_cin( int max) {
 void Addpipe(Pipe& p)
 {
 	cout << "\nInput lenght";
-	p.lenght=error();
+	p.lenght= checkfloatvalue();
 	cout << "\nInput diameter";
-	p.diameter = error();
+	p.diameter = checkfloatvalue();
 	cout << "\nChoose status of pipe(0 if repairing, 1 if works)";
-	p.status = status_cin();
-	 status(p.status);
+	p.status = status();
+	 outputstatus(p.status);
 }
 
 void AddCS(ComSt& cs) {
@@ -108,7 +108,7 @@ void AddCS(ComSt& cs) {
 
 void Viewall(Pipe& p, ComSt& cs) {
 	cout << "\nPipe info:\nLenght: " << p.lenght << "\nDiameter:" << p.diameter
-		<< "\nStatus:"; status(p.status);
+		<< "\nStatus:"; outputstatus(p.status);
 	cout << "\nComressor Station info:\nName: " << cs.name << "\nNumber of workshops: " << cs.workshop
 		<< "\nNumber of working workshops: " << cs.working_ws << "\nEfficiency: " << cs.effeciency << "%" << endl;
 }
@@ -118,8 +118,8 @@ void Editpipe(Pipe& p) {
 		cout << "\nTHere is no pipe to edit" << endl;
 	else {
 		cout << "\nInput new status of pipe (0-repairing, 1-working)" << endl;
-		p.status = status_cin();
-		status(p.status);
+		p.status = status();
+		outputstatus(p.status);
 	}
 }
 
