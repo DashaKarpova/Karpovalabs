@@ -14,12 +14,13 @@ struct Pipe
 struct ComSt
 {
 	string name = "";
-	double workshop = 0, working_ws = -1, change_comst = 0; 
+	int workshop = 0, working_ws = -1, change_comst = 0; 
 	float effeciency = 0; 
 };
 
 //ошибка при вводе значений
-float error(float i) { 
+float error() { 
+	float i;
 	while ((((cin>>i).fail())||(cin.peek() != '\n'))||(i<=0)) {
 		cout << "Error!!! Input numeric value without gap" << endl;
 		cin.clear();
@@ -30,7 +31,8 @@ float error(float i) {
 }
 
 //проверка 
-int check_option(int x) {
+int check_option() {
+	int x;
 	while (((cin >> x).fail()) || (cin.peek() != '\n')) {
 		cout << "Input correct number(0-7)" << endl;
 		cin.clear();
@@ -46,7 +48,8 @@ void status(bool status) {
 		cout<<"\nPipe is repairing";
 }
 
-bool status_cin(bool checkstatus) {
+bool status_cin() {
+	bool checkstatus;
 	while (((cin >> checkstatus).fail()) || (cin.peek() != '\n'))
 	{
 		cout << "Error!\nInput one of the predefined states:\n 0.In repair\n 1.In work\n ";
@@ -57,7 +60,8 @@ bool status_cin(bool checkstatus) {
 }
 
 //Проверка цехов
-int integervalue(int x) {
+int integervalue() {
+	int x;
 	while ((((cin >> x).fail()) || (cin.peek() != '\n')) ||(x / trunc(x) != 1)||(x<=0)) {
 		cout << "Error!!! Input integer value" << endl;
 		cin.clear();
@@ -66,13 +70,14 @@ int integervalue(int x) {
 	return x;
 }
 
-int workshop_cin(int x, int y) {
-	while ((((cin>>x).fail())||(cin.peek()!='\n')) || (x > y) || (x <= 0)) {
+int workshop_cin( int max) {
+	int workshop;
+	while ((((cin>>workshop).fail())||(cin.peek()!='\n')) || (workshop > max) || (workshop < 0)) {
 		cout << "Error!!! Input numeric value" << endl;
 		cin.clear();
 		cin.ignore(INT_MAX, '\n');
 	}
-	return x;
+	return workshop;
 }
 
 
@@ -80,11 +85,11 @@ int workshop_cin(int x, int y) {
 void Addpipe(Pipe& p)
 {
 	cout << "\nInput lenght";
-	p.lenght=error(p.lenght);
+	p.lenght=error();
 	cout << "\nInput diameter";
-	p.diameter = error(p.diameter);
+	p.diameter = error();
 	cout << "\nChoose status of pipe(0 if repairing, 1 if works)";
-	p.status = status_cin(p.status);
+	p.status = status_cin();
 	 status(p.status);
 }
 
@@ -94,9 +99,9 @@ void AddCS(ComSt& cs) {
 	cin.ignore(INT_MAX, '\n');
 	getline(cin, cs.name);
 	cout << "\nNumber_of_workshop";
-	cs.workshop = integervalue(cs.workshop);
+	cs.workshop = integervalue();
 	cout << "\nNumber_of_Working_workshop";
-	cs.working_ws = workshop_cin(cs.working_ws, cs.workshop);
+	cs.working_ws = workshop_cin(cs.workshop);
 	cs.effeciency = float(cs.working_ws) / float(cs.workshop) * 100;
 	cout << "\nEffeciency:" << cs.effeciency << "%" << endl;
 }
@@ -113,7 +118,7 @@ void Editpipe(Pipe& p) {
 		cout << "\nTHere is no pipe to edit" << endl;
 	else {
 		cout << "\nInput new status of pipe (0-repairing, 1-working)" << endl;
-		p.status = status_cin(p.status);
+		p.status = status_cin();
 		status(p.status);
 	}
 }
@@ -123,7 +128,7 @@ void EditCS(ComSt& cs) {
 		cout << "\nThere is Compressor Station to edit" << endl;
 	else {
 		cout << "\nInput number of working workshops: " << endl;
-		cs.working_ws = workshop_cin(cs.working_ws, cs.workshop);
+		cs.working_ws = workshop_cin(cs.workshop);
 		cs.effeciency = float(cs.working_ws) / float(cs.workshop) * 100;
 		cout << "\nEfficiency " << cs.effeciency << "%" << endl;
 	}
@@ -173,7 +178,7 @@ int main() {
 
 	while (option) {
 		cout << "\nChoose Option:\n 1.Add pipe 2. Add compressor station 3.View all objects 4. Edit pipe 5. Edit Comressor Station 6. Save 7. Load 0. Exit\n";
-		option = check_option(option);
+		option = check_option();
 		switch (option) {
 		case 1: {
 			Addpipe(p);
