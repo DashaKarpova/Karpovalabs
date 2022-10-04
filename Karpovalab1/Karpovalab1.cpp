@@ -7,7 +7,7 @@ using namespace std;
 //создание структур (труба и компрессорная станция)
 struct Pipe
 {
-	float lenght = 0, diameter = 0;
+	int lenght = 0, diameter = 0;
 	int status = -1, change_pipe = 0;
 };
 
@@ -19,8 +19,8 @@ struct ComSt
 };
 
 //ошибка при вводе значений
-float checkfloatvalue() { 
-	float i;
+int checkintegervalue() { 
+	int i;
 	while ((((cin>>i).fail())||(cin.peek() != '\n'))||(i<=0)) {
 		cout << "Error!!! Input numeric value without gap" << endl;
 		cin.clear();
@@ -60,17 +60,9 @@ bool status() {
 }
 
 //Проверка цехов
-int integervalue() {
-	int x;
-	while ((((cin >> x).fail()) || (cin.peek() != '\n'))||(x<=0)) {
-		cout << "Error!!! Input integer value" << endl;
-		cin.clear();
-		cin.ignore(INT_MAX, '\n');
-	}
-	return x;
-}
 
-int workshop_cin( int max) {
+
+int correctworkingws( int max) {
 	int workshop;
 	while ((((cin>>workshop).fail())||(cin.peek()!='\n')) || (workshop > max) || (workshop < 0)) {
 		cout << "Error!!! Input numeric value" << endl;
@@ -85,9 +77,9 @@ int workshop_cin( int max) {
 void Addpipe(Pipe& p)
 {
 	cout << "\nInput lenght";
-	p.lenght= checkfloatvalue();
+	p.lenght= checkintegervalue();
 	cout << "\nInput diameter";
-	p.diameter = checkfloatvalue();
+	p.diameter = checkintegervalue();
 	cout << "\nChoose status of pipe(0 if repairing, 1 if works)";
 	p.status = status();
 	 outputstatus(p.status);
@@ -99,9 +91,9 @@ void AddCS(ComSt& cs) {
 	cin.ignore(INT_MAX, '\n');
 	getline(cin, cs.name);
 	cout << "\nNumber_of_workshop";
-	cs.workshop = integervalue();
+	cs.workshop = checkintegervalue();
 	cout << "\nNumber_of_Working_workshop";
-	cs.working_ws = workshop_cin(cs.workshop);
+	cs.working_ws = correctworkingws(cs.workshop);
 	cs.effeciency = float(cs.working_ws) / float(cs.workshop) * 100;
 	cout << "\nEffeciency:" << cs.effeciency << "%" << endl;
 }
@@ -128,7 +120,7 @@ void EditCS(ComSt& cs) {
 		cout << "\nThere is Compressor Station to edit" << endl;
 	else {
 		cout << "\nInput number of working workshops: " << endl;
-		cs.working_ws = workshop_cin(cs.workshop);
+		cs.working_ws = correctworkingws(cs.workshop);
 		cs.effeciency = float(cs.working_ws) / float(cs.workshop) * 100;
 		cout << "\nEfficiency " << cs.effeciency << "%" << endl;
 	}
@@ -136,7 +128,7 @@ void EditCS(ComSt& cs) {
 
 void savetofile(Pipe& p, ComSt& cs) {
 	ofstream file;
-	file.open("Data.txt", ios::in);
+	file.open("Data.txt");
 	if (file.is_open()) {
 		file << p.lenght << endl
 			<< p.diameter << endl
