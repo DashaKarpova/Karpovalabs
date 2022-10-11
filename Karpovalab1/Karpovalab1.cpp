@@ -99,10 +99,20 @@ void AddCS(ComSt& cs) {
 }
 
 void Viewall(Pipe& p, ComSt& cs) {
-	cout << "\nPipe info:\nLenght: " << p.lenght << "\nDiameter:" << p.diameter
-		<< "\nStatus:"; outputstatus(p.status);
-	cout << "\nComressor Station info:\nName: " << cs.name << "\nNumber of workshops: " << cs.workshop
-		<< "\nNumber of working workshops: " << cs.working_ws << "\nEfficiency: " << cs.effeciency << "%" << endl;
+	if (p.status != -1) {
+		cout << "\nPipe info:\nLenght: " << p.lenght << "\nDiameter:" << p.diameter
+			<< "\nStatus:"; outputstatus(p.status);
+	}
+	else {
+		cout << "\nPipe info: There is no pipe";
+	}
+	if (cs.workshop != 0) {
+		cout << "\nComressor Station info:\nName: " << cs.name << "\nNumber of workshops: " << cs.workshop
+			<< "\nNumber of working workshops: " << cs.working_ws << "\nEfficiency: " << cs.effeciency << "%" << endl;
+	}
+	else {
+		cout << "\nCompressor Station info: There is no Comressor Station";
+	}
 }
 
 void Editpipe(Pipe& p) {
@@ -117,7 +127,7 @@ void Editpipe(Pipe& p) {
 
 void EditCS(ComSt& cs) {
 	if (cs.working_ws == -1)
-		cout << "\nThere is Compressor Station to edit" << endl;
+		cout << "\nThere is no Compressor Station to edit" << endl;
 	else {
 		cout << "\nInput number of working workshops: " << endl;
 		cs.working_ws = correctworkingws(cs.workshop);
@@ -129,39 +139,52 @@ void EditCS(ComSt& cs) {
 void savetofile(Pipe& p, ComSt& cs) {
 	ofstream file;
 	file.open("Data.txt");
+	file << (p.status != -1) << endl;
+	file << (cs.workshop > 0) << endl;
 	if (file.is_open()) {
-		file << p.lenght << endl
-			<< p.diameter << endl
-			<< p.status << endl
-			<< cs.name << endl
-			<< cs.workshop << endl
-			<< cs.working_ws << endl
-			<< cs.effeciency <<"%"<< endl;
+		if (p.status != -1) {
+			file << p.lenght << endl
+				<< p.diameter << endl
+				<< p.status << endl;
+		}
+		if (cs.workshop > 0) {
+			file << cs.name << endl
+				<< cs.workshop << endl
+				<< cs.working_ws << endl
+				<< cs.effeciency << "%" << endl;
+		}
 		file.close();
 	}
 }
 void loadfromfile(Pipe& p, ComSt& cs) {
 	ifstream file2;
 	string line;
+	int amountpipe;
+	int amountcs;
 	file2.open("Data.txt");
 	if (file2.is_open()) {
-		getline(file2, line);
-		p.lenght = stoi(line);
-		getline(file2, line);
-		p.diameter = stoi(line);
-		getline(file2, line);
-		p.status = stoi(line);
-		getline(file2, line);
-		cs.name = line;
-		getline(file2, line);
-		cs.workshop = stoi(line);
-		getline(file2, line);
-		cs.working_ws = stoi(line);
-		getline(file2, line);
-		cs.effeciency = stod(line);
+		file2 >> amountpipe >> amountcs;
+		if (amountpipe < 1 && amountcs < 1) {
+			cout << "\nFile doesn't have data" << endl;
+		}
+		if (amountpipe > 0 && amountcs == 0) {
+	
+			file2 >> p.lenght >> p.diameter >> p.status;
+			if (amountpipe == 0 && amountcs > 0) {
+
+				file2.ignore();
+				getline(file2, cs.name);
+				file2 >> cs.workshop >> cs.working_ws >> cs.effeciency;
+			}
+			else {
+
+				file2 >> p.lenght >> p.diameter >> p.status;
+				file2.ignore();
+				getline(file2, cs.name);
+				file2 >> cs.workshop >> cs.working_ws >> cs.effeciency;
+			}
+		}
 	}
-	else
-		cout << "file doesn't exist";
 }
 int main() {
 	int option = -1;
