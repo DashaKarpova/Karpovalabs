@@ -23,7 +23,7 @@ public:
 	void edit_Pipe();
 	void save_pipe(ofstream& file);
 	void load_pipe(ifstream& file);
-	int get_id(){ return idpipe; }
+	int get_id() { return idpipe; }
 
 private:
 	double lenght = 0, diameter = 0;
@@ -32,7 +32,8 @@ private:
 };
 
 class ComSt
-{public:
+{
+public:
 	string name = "";
 	static int max_idc;
 	ComSt() {
@@ -47,7 +48,7 @@ class ComSt
 private:
 	int workshop, working_ws, idcomst;
 	double effeciency;
-	
+
 };
 
 int Pipe::max_id = 0;
@@ -173,15 +174,19 @@ int main() {
 	ComSt cs;
 	unordered_map<int, Pipe> pipe_group;
 	unordered_map<int, ComSt> cs_group;
+	unordered_set <int> iddp;
+	unordered_set <int> iddcs;
 
 	while (option) {
 		cout << "\nChoose Option:\n 1.Add pipe 2. Add compressor station 3.View all objects 4. Edit pipe 5. Edit Comressor Station 6. Save 7. Load 0. Exit\n";
 		option = getcorrectnumber(0,7);
 		switch (option) {
 		case 1: {
+			iddp.insert(Pipe::max_id);
 			Pipe p;
 			cin >> p;
 			pipe_group.insert({ p.get_id(),p });
+			cout << iddp.size();
 			break;
 		}
 		case 2: {
@@ -196,8 +201,29 @@ int main() {
 
 		}
 		case 4: {
-			Editpipe(p);
-			break;
+			int edit;
+			int id1;
+			int x;
+			Pipe p;
+			if (pipe_group.size() != 0) {
+				cout << "1.Choose one pipe, 2. Choose Pipes 3. Delete pipe" << endl;
+				edit = getcorrectnumber(1, 3);
+				if (edit == 1) {
+					cout << "1. Choose pipe to edit " << endl;
+					cout << iddp;
+					id1 = getcorrectnumber(0, (int)pipe_group.size());
+					pipe_group[id1].edit_Pipe();
+				}
+				if (edit == 2) {
+					vector<int> iddp;
+					cout << "Choose pipes by 1. filter 2. id" << endl;
+					x = getcorrectnumber(0, 1);
+					for (auto& i : idp)
+						pipe_group[i].status = s;
+
+
+				}
+			}
 		}
 		case 5: {
 			EditCS(cs);
