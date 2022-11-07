@@ -3,75 +3,37 @@
 #include <string>
 #include<vector>
 #include<float.h>
+#include "Karpovaheader.h"
 #include <unordered_map>
 #include <unordered_set>
 
 using namespace std;
 
-class Pipe
-{
-public:
-	static int max_id;
-	string name = "";
-	bool status = 0;
-	Pipe() {
-		idpipe = max_id++;
-	}
-	friend istream& operator>> (istream& in, Pipe& p);
-	friend ostream& operator<< (ostream& out, Pipe& p);
-	void edit_Pipe();
-	void save_pipe(ofstream& file);
-	void load_pipe(ifstream& file);
-	int get_id() { return idpipe; }
-
-private:
-	double lenght = 0, diameter = 0;
-	int idpipe = 0;
-
-};
-
-class ComSt
-{
-public:
-	string name = "";
-	static int max_idc;
-	ComSt() {
-		idcomst = max_idc++;
-	}
-	friend istream& operator>> (istream& in, ComSt& cs);
-	friend ostream& operator<< (ostream& out, ComSt& cs);
-	void edit_ComSt();
-	void save_ComSt(ofstream& file);
-	void load_ComSt(ifstream& file);
-	int get_idc() { return idcomst; }
-	double get_unused() { return (((double)workshop - (double)working_ws) / (double)workshop) * 100; }
-private:
-	int workshop, working_ws, idcomst;
-	double effeciency;
-
-};
-
-int Pipe::max_id = 0;
-int ComSt::max_idc = 0;
  
 template <typename T>
 T getcorrectnumber(T min, T max) {
 	int x;
-	do {
+	while ((cin >> x).fail() || (x<min) || (x>max)) {
 		cin.clear();
 		cin.ignore(10000, '\n');
 		cout << "Type number (" << min << "-" << max << "):";
-		cin >> x;
-	} while (cin.fail() || x<min || x>max);
+	} 
 	return x;
 }
 
+string outputstatus(bool status) {
+	if (status == true)
+		return ("Pipe works");
+	else
+		return ("Pipe is repairing");
+}
 
 template <typename T>
 using filter_p = bool (*) (Pipe& p, T par);
 template <typename T>
 using filter_cs = bool(*) (ComSt& cs, T par);
 template <typename T>
+
 vector <int> search_p_by_parametr(unordered_map <int, Pipe>& pipe_group, filter_p<T> f, T par) {
 	vector <int> id;
 	for (auto& pipe : pipe_group) {
@@ -86,7 +48,7 @@ vector <int> search_cs_by_parametr(unordered_map <int, ComSt>& cs_group, filter_
 	vector <int> id;
 	for (auto& cs : cs_group) {
 		if (f(cs.second, par))
-			id.push_back(cs.second.get_idd());
+			id.push_back(cs.second.get_idc());
 	}
 	return id;
 }
@@ -151,13 +113,14 @@ ostream& operator<< (ostream& out, ComSt& cs) {
 	return out;
 }
 
-string outputstatus(bool status) {
-	if (status == true)
-		return ("Pipe works");
-	else 
-		return ("Pipe is repairing");
+ostream& operator<< (ostream& out, unordered_set <int>& p) {
+	out << "Exiting id: ";
+	for (auto& i : p) {
+		out << i << " ";
+	}
+	out << endl;
+	return out;
 }
-
 
 
 
@@ -260,8 +223,7 @@ int main() {
 	int option = -1;
 	unordered_map<int, Pipe> pipe_group;
 	unordered_map<int, ComSt> cs_group;
-	unordered_set <int> iddp;
-	unordered_set <int> iddcs;
+
 
 	while (option) {
 		cout << "\nChoose Option:\n 1.Add pipe 2. Add compressor station 3.View all objects 4. Edit pipe 5. Edit Comressor Station 6. Save 7. Load 8. Search Pipe 9. Search ComSt 0. Exit\n";
@@ -272,10 +234,10 @@ int main() {
 			Pipe p;
 			cin >> p;
 			pipe_group.insert({ p.get_id(),p });
-			cout << iddp.size();
 			break;
 		}
 		case 2: {
+			iddcs.insert(ComSt:: max_idc);
 			ComSt cs;
 			cin >> cs;
 			cs_group.insert({ cs.get_idc(),cs });
@@ -290,7 +252,6 @@ int main() {
 			int edit;
 			int id1;
 			int x;
-			Pipe p;
 			if (pipe_group.size() != 0) {
 				cout << "1.Choose one pipe 2.Choose pipes 3.Delete pipe" << endl;;
 				edit = getcorrectnumber(1, 3);
@@ -307,16 +268,22 @@ int main() {
 					x = getcorrectnumber(1, 2);
 					if (x == 1) {
 						search_p(pipe_group, idp);
-						cout << "Enter new status (0 if repairing, 1 if works)" << endl;
-						bool s;
-						s = getcorrectnumber(0, 1);
-						for (auto& i : idp)
-							pipe_group[i].status = s;
+						if (idp.size() != 0) {
+							cout << "Enter new status (0 if repairing, 1 if works)" << endl;
+							bool s;
+							s = getcorrectnumber(0, 1);
+							for (auto& i : idp)
+								pipe_group[i].status = s;
+						}
+						else
+							cout << "There is no pipe to edit";
+						break;
 					}
 
 
 					if (x == 2) {
 						unordered_set <int> ids;
+						cout << iddp;
 						cout << "Enter the number of identifiers of pipe you want to edit" << endl;
 						int n;
 						n = getcorrectnumber(0, Pipe::max_id);
