@@ -1,5 +1,14 @@
+#include "Header.h"
 #include "ComSt.h"
-
+#include <iostream>
+#include <fstream>
+#include <string>
+#include<vector>
+#include<float.h>
+#include <unordered_map>
+#include <unordered_set>
+using namespace std;
+int ComSt::max_idcs = 0;
 istream& operator>>(istream& in, ComSt& cs) {
 	cout << "\n Index of ComSt " << cs.idcomst;
 	cout << "\nInput name";

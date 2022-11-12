@@ -5,57 +5,23 @@
 #include<float.h>
 #include "Pipe.h"
 #include "ComSt.h"
+#include "Header.h"
 #include <unordered_map>
 #include <unordered_set>
 
 using namespace std;
-
 unordered_map<int, Pipe> pipe_group;
 unordered_map<int, ComSt> cs_group;
 unordered_set <int> iddpipe;
 unordered_set <int> idcomst;
- 
-template <typename T>
-T getcorrectnumber(T min, T max) {
-	int x;
-	while ((cin >> x).fail() || (x<min) || (x>max)) {
-		cin.clear();
-		cin.ignore(10000, '\n');
-		cout << "Type number (" << min << "-" << max << "):";
-	} 
-	return x;
-}
 
-string outputstatus(bool status) {
-	if (status == true)
-		return ("Pipe works");
-	else
-		return ("Pipe is repairing");
-}
-
-template <typename T>
-using filter_p = bool (*) (Pipe& p, T par);
-template <typename T>
-using filter_cs = bool(*) (ComSt& cs, T par);
-template <typename T>
-
-vector <int> search_p_by_parametr(unordered_map <int, Pipe>& pipe_group, filter_p<T> f, T par) {
-	vector <int> id;
-	for (auto& pipe : pipe_group) {
-		if (f(pipe.second, par))
-			id.push_back(pipe.second.get_id());
+ostream& operator<< (ostream& out, unordered_set <int>& par) {
+	out << "Exiting id: ";
+	for (auto& i : par) {
+		out << i << " ";
 	}
-	return id;
-}
-
-template <typename T>
-vector <int> search_cs_by_parametr(unordered_map <int, ComSt>& cs_group, filter_cs<T> f, T par) {
-	vector <int> id;
-	for (auto& cs : cs_group) {
-		if (f(cs.second, par))
-			id.push_back(cs.second.get_idc());
-	}
-	return id;
+	out << endl;
+	return out;
 }
 
 bool check_p_name(Pipe& p, string name) {
@@ -72,15 +38,6 @@ bool check_cs_name(ComSt& cs, string name) {
 
 bool check_unworking(ComSt& cs, double p) {
 	return (cs.get_unused() >= p);
-}
-
-ostream& operator<< (ostream& out, unordered_set <int>& par) {
-	out << "Exiting id: ";
-	for (auto& i : par) {
-		out << i << " ";
-	}
-	out << endl;
-	return out;
 }
 
 
@@ -144,7 +101,7 @@ void AddPipe() {
 }
 
 void AddComSt() {
-	idcomst.insert(ComSt::max_idc);
+	idcomst.insert(ComSt::max_idcs);
 	ComSt cs;
 	cin >> cs;
 	cs_group.insert({ cs.get_idc(),cs });
@@ -238,7 +195,7 @@ void EditComSt() {
 			if (n == 2) {
 				cout << "Enter the number of cs you want to edit";
 				int y;
-				y = getcorrectnumber(0, ComSt::max_idc);
+				y = getcorrectnumber(0, ComSt::max_idcs);
 				cout << "Enter idetifiers of CSs" << endl;
 				for (int i = 0; i < y; i++) {
 					if (cs_group.find(i) != cs_group.end())
@@ -263,7 +220,7 @@ void EditComSt() {
 			if (d == 1) {
 				cout << "Enter id of CS you want to delete" << endl;
 				int n;
-				n = getcorrectnumber(0, ComSt::max_idc);
+				n = getcorrectnumber(0, ComSt::max_idcs);
 				cs_group.erase(cs_group.find(n));
 			}
 			else {
@@ -274,7 +231,7 @@ void EditComSt() {
 				if (n == 2) {
 					cout << "Enter the number of cs you want to edit";
 					int y;
-					y = getcorrectnumber(0, ComSt::max_idc);
+					y = getcorrectnumber(0, ComSt::max_idcs);
 					cout << "Enter idetifiers of CSs" << endl;
 					for (int i = 0; i < y; i++) {
 						if (cs_group.find(i) != cs_group.end())
@@ -331,7 +288,7 @@ void Loadfromfile() {
 		cout << "file is not found";
 	else {
 		Pipe::max_id = 0;
-		ComSt::max_idc = 0;
+		ComSt::max_idcs = 0;
 		pipe_group.clear();
 		cs_group.clear();
 		file2 >> p1 >> cs2;
@@ -344,8 +301,8 @@ void Loadfromfile() {
 		for (int i = 0; i < cs2; i++) {
 			newcs.load_ComSt(file2);
 			cs_group.insert({ newcs.get_idc(),newcs });
-			if (ComSt::max_idc < newcs.get_idc())
-				ComSt::max_idc = newcs.get_idc();
+			if (ComSt::max_idcs < newcs.get_idc())
+				ComSt::max_idcs = newcs.get_idc();
 		}
 	}
 
@@ -383,7 +340,6 @@ void SearchComSt() {
 
 int main() {
 	int option = -1;
-
 
 	while (option) {
 		cout << "\nChoose Option:\n 1.Add pipe 2. Add compressor station 3.View all objects 4. Edit pipe 5. Edit Comressor Station 6. Save 7. Load 8. Search Pipe 9. Search ComSt 0. Exit\n";

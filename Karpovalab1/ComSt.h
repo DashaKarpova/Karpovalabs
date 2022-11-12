@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include <string>
 #include<vector>
 #include<float.h>
@@ -11,9 +12,9 @@ class ComSt
 {
 public:
 	string name = "";
-	static int max_idc;
+	static int max_idcs;
 	ComSt() {
-		idcomst = max_idc++;
+		idcomst = max_idcs++;
 	}
 	friend istream& operator>> (istream& in, ComSt& cs);
 	friend ostream& operator<< (ostream& out, ComSt& cs);
@@ -26,6 +27,4 @@ private:
 	int workshop, working_ws, idcomst;
 	double effeciency;
 
-};
-
-int ComSt::max_idc = 0;
+}; 

@@ -1,11 +1,12 @@
 #pragma once
 #include <iostream>
+#include <unordered_map>
+#include <unordered_set>
 #include <string>
 #include<vector>
-#include <string>
 #include<float.h>
 #include <fstream>
-#include<float.h>
+
 
 using namespace std;
 
@@ -20,6 +21,7 @@ public:
 	}
 	friend istream& operator>> (istream& in, Pipe& p);
 	friend ostream& operator<< (ostream& out, Pipe& p);
+	string outputstatus(bool status);
 	void edit_Pipe();
 	void save_pipe(ofstream& file);
 	void load_pipe(ifstream& file);
@@ -31,5 +33,5 @@ private:
 
 };
 
-int Pipe::max_id = 0;
+
 
