@@ -3,7 +3,8 @@
 #include <string>
 #include<vector>
 #include<float.h>
-#include "Karpovaheader.h"
+#include "Pipe.h"
+#include "ComSt.h"
 #include <unordered_map>
 #include <unordered_set>
 
@@ -11,6 +12,8 @@ using namespace std;
 
 unordered_map<int, Pipe> pipe_group;
 unordered_map<int, ComSt> cs_group;
+unordered_set <int> iddpipe;
+unordered_set <int> idcomst;
  
 template <typename T>
 T getcorrectnumber(T min, T max) {
@@ -71,53 +74,9 @@ bool check_unworking(ComSt& cs, double p) {
 	return (cs.get_unused() >= p);
 }
 
-istream& operator>> (istream& in, Pipe& p) {
-	cout << "\n Index of pipe" << p.idpipe;
-	cout << "\nInput name ";
-	cin.clear();
-	cin.ignore(INT_MAX,'\n');
-	getline(cin, p.name);
-	cout << "\n Input lenght ";
-	p.lenght = getcorrectnumber(0.0, DBL_MAX);
-	cout << "\n Input diameter ";
-	p.diameter = getcorrectnumber(0.0, DBL_MAX);
-	cout << "\nChoose status of pipe(0 if repairing, 1 if works)";
-	p.status = getcorrectnumber(0,1);
-	cout << outputstatus(p.status) << endl;
-	return in;
-}
-
-istream& operator>>(istream& in, ComSt& cs) {
-	cout << "\n Index of ComSt " << cs.idcomst;
-	cout << "\nInput name";
-	cin.clear();
-	cin.ignore(INT_MAX, '\n');
-	getline(in, cs.name);
-	cout << "\nNumber_of_workshop";
-	cs.workshop = getcorrectnumber(0, INT_MAX);
-	cout << "\nNumber_of_Working_workshop";
-	cs.working_ws = getcorrectnumber(0,cs.workshop);
-	cs.effeciency = float(cs.working_ws) / float(cs.workshop) * 100;
-	cout << "\nEffeciency:" << cs.effeciency << "%" << endl;
-	return in;
-}
-
-ostream& operator<<(ostream& out, Pipe& p) {
-	out<<"\nIndex of pipe: "<<p.idpipe<< "\nPipe info: " << "\nName: " << p.name << "\nLenght: " << p.lenght << "\nDiameter : " << p.diameter
-		<< "\nStatus: " << outputstatus(p.status) << endl;
-	return out;
-}
-
-ostream& operator<< (ostream& out, ComSt& cs) {
-	out << "\nIndex of CS: " << cs.idcomst << "\nCS info:\nName: " << cs.name << "\nNumber of workshops: " << cs.workshop
-		<< "\nNumber of working workshops: " << cs.working_ws << "\nEffeciency: "
-		<< cs.effeciency << "%" << endl;
-	return out;
-}
-
-ostream& operator<< (ostream& out, unordered_set <int>& p) {
+ostream& operator<< (ostream& out, unordered_set <int>& par) {
 	out << "Exiting id: ";
-	for (auto& i : p) {
+	for (auto& i : par) {
 		out << i << " ";
 	}
 	out << endl;
@@ -133,48 +92,6 @@ void Viewall(unordered_map<int, Pipe>& pipe_group, unordered_map<int, ComSt>& cs
 	for (auto& cs : cs_group) {
 		cout << cs.second << endl;
 	}
-}
-
-void Pipe::edit_Pipe() {
-	cout << "Status: " << outputstatus(status) << endl;
-	cout << "Enter new status(0- repaire, 1- work)" << endl;
-	status = getcorrectnumber(0, 1);
-	cout << outputstatus(status);
-}
-
-void ComSt::edit_ComSt() {
-	cout << "Workshops " << workshop << endl;
-	cout << "Working workshops " << working_ws << endl;
-	cout << "Enter new number of working workshops" << endl;
-	working_ws = getcorrectnumber(0, workshop);
-}
-
-void Pipe::save_pipe(ofstream& file) {
-	file << idpipe << endl << name << endl << lenght << endl << diameter << endl << status << endl;
-}
-
-void ComSt::save_ComSt(ofstream& file) {
-	file << idcomst << endl << name << endl
-		<< workshop << endl << working_ws << endl << effeciency<< endl;
-}
-
-void Pipe::load_pipe(ifstream& file2){
-	file2 >> idpipe;
-	getline(file2, name);
-	getline(file2, name);
-	file2 >> lenght;
-	file2 >> diameter;
-	file2 >> status;
-}
-
-void ComSt::load_ComSt(ifstream& file2) {
-	file2 >> idcomst;
-	getline(file2, name);
-	getline(file2, name);
-	file2 >> workshop;
-	file2 >> working_ws;
-	file2 >> effeciency;
-
 }
 
 
@@ -219,6 +136,20 @@ void search_cs(unordered_map <int, ComSt>& cs_group, vector<int>& id) {
 
 }
 
+void AddPipe() {
+	iddpipe.insert(Pipe::max_id);
+	Pipe p;
+	cin >> p;
+	pipe_group.insert({ p.get_id(),p });
+}
+
+void AddComSt() {
+	idcomst.insert(ComSt::max_idc);
+	ComSt cs;
+	cin >> cs;
+	cs_group.insert({ cs.get_idc(),cs });
+}
+
 void EditPipes() {
 	int edit;
 	int id1;
@@ -228,7 +159,7 @@ void EditPipes() {
 		edit = getcorrectnumber(1, 3);
 		if (edit == 1) {
 			cout << "1.Choose pipe to edit" << endl;
-			cout << iddp;
+			cout << iddpipe;
 			id1 = getcorrectnumber(0, (int)pipe_group.size());
 			pipe_group[id1].edit_Pipe();
 
@@ -254,7 +185,7 @@ void EditPipes() {
 
 			if (x == 2) {
 				unordered_set <int> ids;
-				cout << iddp;
+				cout << iddpipe;
 				cout << "Enter the number of identifiers of pipe you want to edit" << endl;
 				int n;
 				n = getcorrectnumber(0, Pipe::max_id);
@@ -264,8 +195,8 @@ void EditPipes() {
 					y = getcorrectnumber(0, Pipe::max_id - 1);
 					if (pipe_group.find(y) != pipe_group.end())
 						ids.insert(y);
-
 				}
+
 				cout << "Enter new status (0 if repairing, 1 if works)" << endl;
 				bool s;
 				s = getcorrectnumber(0, 1);
@@ -278,7 +209,7 @@ void EditPipes() {
 			int n;
 			n = getcorrectnumber(0, Pipe::max_id);
 			pipe_group.erase(pipe_group.find(n));
-			iddp.erase(iddp.find(n));
+			iddpipe.erase(iddpipe.find(n));
 			cout << "Pipe was deleted";
 		}
 	}
@@ -356,8 +287,8 @@ void EditComSt() {
 					search_cs(cs_group, idcs);
 					for (auto& i : idcs)
 						cs_group.erase(cs_group.find(i));
-					for (auto& i : iddcs)
-						iddcs.erase(i);
+					for (auto& i : idcomst)
+						idcomst.erase(i);
 				}
 
 				cout << "CS was deleted";
@@ -459,17 +390,11 @@ int main() {
 		option = getcorrectnumber(0,9);
 		switch (option) {
 		case 1: {
-			iddp.insert(Pipe::max_id);
-			Pipe p;
-			cin >> p;
-			pipe_group.insert({ p.get_id(),p });
+			AddPipe();
 			break;
 		}
 		case 2: {
-			iddcs.insert(ComSt:: max_idc);
-			ComSt cs;
-			cin >> cs;
-			cs_group.insert({ cs.get_idc(),cs });
+			AddComSt();
 			break;
 		}
 		case 3: {
