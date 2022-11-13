@@ -7,7 +7,6 @@
 #include<float.h>
 #include <fstream>
 
-
 using namespace std;
 
 class Pipe
@@ -19,9 +18,9 @@ public:
 	Pipe() {
 		idpipe = max_id++;
 	}
+	string outputstatus(bool status);
 	friend istream& operator>> (istream& in, Pipe& p);
 	friend ostream& operator<< (ostream& out, Pipe& p);
-	string outputstatus(bool status);
 	void edit_Pipe();
 	void save_pipe(ofstream& file);
 	void load_pipe(ifstream& file);
