@@ -14,11 +14,11 @@ class Pipe
 public:
 	static int max_id;
 	string name = "";
-	bool status = 0;
+	bool status = false;
 	Pipe() {
 		idpipe = max_id++;
 	}
-	string outputstatus(bool status);
+	string outputstatus();
 	friend istream& operator>> (istream& in, Pipe& p);
 	friend ostream& operator<< (ostream& out, Pipe& p);
 	void edit_Pipe();
