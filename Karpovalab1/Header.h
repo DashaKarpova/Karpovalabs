@@ -23,6 +23,16 @@ T getcorrectnumber(T min, T max) {
 }
 
 template <typename T>
+ostream& operator<< (ostream& out, unordered_map <int, T>& p) {
+	out << "Exiting id: ";
+	for (auto& [i, obj] : p) {
+		cout << i << " ";
+	}
+	out << endl;
+	return out;
+}
+
+template <typename T>
 using filter_p = bool (*) (Pipe& p, T par);
 
 template <typename T>

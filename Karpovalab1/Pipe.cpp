@@ -8,13 +8,16 @@
 #include <float.h>
 #include "Header.h"
 using namespace std;
+
 string Pipe::outputstatus(bool status) {
 	if (status == true)
 		return ("Pipe works");
 	else
 		return ("Pipe is repairing");
 }
+
 int Pipe::max_id = 0;
+
 istream& operator>> (istream& in, Pipe& p) {
 	cout << "\n Index of pipe" << p.idpipe;
 	cout << "\nInput name ";
