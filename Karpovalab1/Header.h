@@ -33,17 +33,27 @@ ostream& operator<< (ostream& out, unordered_map <int, T>& p) {
 }
 
 template <typename T>
+ostream& operator<< (ostream& out, unordered_set<int, T>& p) {
+	out << "Exiting id: ";
+	for (auto& i : p) {
+		cout << i << " ";
+	}
+	out << endl;
+	return out;
+}
+
+template <typename T>
 using filter_p = bool (*) (Pipe& p, T par);
 
 template <typename T>
 using filter_cs = bool(*) (ComSt& cs, T par);
 
 template <typename T>
-vector <int> search_p_by_parametr(unordered_map <int, Pipe>& pipe_group, filter_p<T> f, T par) {
-	vector <int> id;
+unordered_set <int> search_p_by_parametr(unordered_map <int, Pipe>& pipe_group, filter_p<T> f, T par) {
+	unordered_set <int> id;
 	for (auto& pipe : pipe_group) {
 		if (f(pipe.second, par))
-			id.push_back(pipe.second.get_id());
+			id.insert(pipe.second.get_id());
 	}
 	return id;
 }

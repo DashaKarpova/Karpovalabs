@@ -41,9 +41,9 @@ void Viewall(unordered_map<int, Pipe>& pipe_group, unordered_map<int, ComSt>& cs
 }
 
 
-vector<int> search_p(unordered_map <int, Pipe>& pipe_group) {
+unordered_set <int> search_p(unordered_map <int, Pipe>& pipe_group) {
 	int x;
-	vector <int> id;
+	unordered_set <int> id;
 	cout << "Search pipe by 1.name 2.status" << endl;
 	x = getcorrectnumber(1, 2);
 	if (x == 1) {
@@ -62,6 +62,7 @@ vector<int> search_p(unordered_map <int, Pipe>& pipe_group) {
 	}
 	return id;
 }
+
 vector<int> search_cs(unordered_map <int, ComSt>& cs_group) {
 	int x;
 	vector<int> id;
@@ -116,13 +117,36 @@ void EditPipes(unordered_map<int, Pipe>& pipe_group) {
 			cout << "Choose pipes by 1.filter 2.id" << endl;
 			int x = getcorrectnumber(1, 2);
 			if (x == 1) {
-			auto idp = search_p(pipe_group);
-				if (idp.size() != 0) {
-					cout << "Enter new status (0 if repairing, 1 if works)" << endl;
-					bool s;
-					s = getcorrectnumber(0, 1);
-					for (auto& i : idp)
-						pipe_group[i].status = s;
+				unordered_set <int> id_group;
+				//vector <int>id_group;
+				int number;
+				int id;
+				auto idp = search_p(pipe_group);
+					if (idp.size() != 0) {
+						cout << idp << endl;
+						cout << "Choose number of identifiers of pipes you want to edit" << endl;
+						number = getcorrectnumber(1, (int)idp.size());
+						for (int i = 0; id_group.size() < number; i++)
+						{
+							id = getcorrectnumber(0, INT_MAX);
+							if (idp.find(id) != idp.end())
+								id_group.insert(id);
+							else
+							{
+								cout << "There is no such pipe" << endl;;
+							}
+
+						}
+							
+							cout << "Enter new status (0 if repairing, 1 if works)" << endl;
+							if (id_group.size()!=0){ 
+								bool s;
+								s = getcorrectnumber(0, 1);
+								for (auto& i : id_group) {
+										pipe_group[i].status = s;
+							}
+							}	
+						
 			}
 
 			else {
@@ -138,12 +162,11 @@ void EditPipes(unordered_map<int, Pipe>& pipe_group) {
 				cout << "Enter the number of identifiers of pipe you want to edit" << endl;
 				int n;
 				int id;
-				n = getcorrectnumber(0, Pipe::max_id);
+				n = getcorrectnumber(1, (int)pipe_group.size() );
 				cout << "Enter idetifiers of pipes" << endl;
 				for (int i = 0; ids.size() < n; i++) {
 					id = getcorrectnumber(0, Pipe::max_id - 1);
 					if (pipe_group.find(id) != pipe_group.end()) {
-						if (pipe_group.find(id) != pipe_group.end())
 							ids.insert(id);
 					}
 					else
@@ -201,7 +224,7 @@ void EditPipes(unordered_map<int, Pipe>& pipe_group) {
 				}
 
 				else {
-					vector <int> idp = search_p(pipe_group);
+					auto idp = search_p(pipe_group);
 					if (idp.size() != 0) {
 						for (auto& i : idp) {
 							pipe_group.erase(pipe_group.find(i));
@@ -268,7 +291,7 @@ void EditComSt(unordered_map<int, ComSt>& cs_group) {
 			}
 
 			else {
-				search_cs(cs_group);
+				auto idcs = search_cs(cs_group);
 				if (idcs.size() != 0) {
 					for (auto& i : idcs)
 						cs_group[i].edit_ComSt();
@@ -304,7 +327,7 @@ void EditComSt(unordered_map<int, ComSt>& cs_group) {
 				n = getcorrectnumber(1, 2);
 				if (n == 2) {
 					cout << cs_group;
-					cout << "Enter the number of cs you want to edit" << endl;
+					cout << "Enter the number of cs you want to delete" << endl;
 					int y;
 					int x;
 					y = getcorrectnumber(1, (int)cs_group.size());
@@ -324,7 +347,7 @@ void EditComSt(unordered_map<int, ComSt>& cs_group) {
 					}
 				}
 				else {
-					search_cs(cs_group);
+					auto idcs=search_cs(cs_group);
 					if (idcs.size() != 0) {
 						for (auto& i : idcs) {
 							cs_group.erase(cs_group.find(i));
@@ -400,9 +423,8 @@ void Loadfromfile() {
 }
 
 void SearchPipes(){
-	vector <int> x;
 	if (pipe_group.size() != 0) {
-		search_p(pipe_group);
+		auto x= search_p(pipe_group);
 		if (x.size() != 0) {
 			for (auto& i : x)
 				cout << pipe_group[i] << endl;
@@ -417,7 +439,7 @@ void SearchPipes(){
 void SearchComSt() {
 	vector <int> x;
 	if (cs_group.size() != 0) {
-		search_cs(cs_group);
+		auto x=search_cs(cs_group);
 		if (x.size() != 0) {
 			for (auto& i : x)
 				cout << cs_group[i] << endl;

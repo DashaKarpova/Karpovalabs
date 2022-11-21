@@ -6,6 +6,7 @@
 #include <float.h>
 #include "Header.h"
 using namespace std;
+//unordered_map<int, Pipe> pipe_group;
 
 string Pipe:: outputstatus() {
 	return status ? "works" : "is repearing";
