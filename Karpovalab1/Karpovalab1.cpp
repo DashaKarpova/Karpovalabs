@@ -62,10 +62,9 @@ unordered_set <int> search_p(unordered_map <int, Pipe>& pipe_group) {
 	}
 	return id;
 }
-
-vector<int> search_cs(unordered_map <int, ComSt>& cs_group) {
+unordered_set<int> search_cs(unordered_map <int, ComSt>& cs_group) {
 	int x;
-	vector<int> id;
+	unordered_set <int> id;
 	cout << "Search CS by 1.name 2.percentage of unused shops" << endl;
 	x = getcorrectnumber(1, 2);
 	if (x == 1) {
@@ -118,7 +117,6 @@ void EditPipes(unordered_map<int, Pipe>& pipe_group) {
 			int x = getcorrectnumber(1, 2);
 			if (x == 1) {
 				unordered_set <int> id_group;
-				//vector <int>id_group;
 				int number;
 				int id;
 				auto idp = search_p(pipe_group);
@@ -162,7 +160,7 @@ void EditPipes(unordered_map<int, Pipe>& pipe_group) {
 				cout << "Enter the number of identifiers of pipe you want to edit" << endl;
 				int n;
 				int id;
-				n = getcorrectnumber(1, (int)pipe_group.size() );
+				n = getcorrectnumber(1, INT_MAX );
 				cout << "Enter idetifiers of pipes" << endl;
 				for (int i = 0; ids.size() < n; i++) {
 					id = getcorrectnumber(0, Pipe::max_id - 1);
@@ -250,6 +248,7 @@ void EditPipes(unordered_map<int, Pipe>& pipe_group) {
 
 void EditComSt(unordered_map<int, ComSt>& cs_group) {
 	vector <int> idcs;
+	int id;
 	if (cs_group.size() != 0) {
 		cout << "1.Edit one CS 2.Edit CSs 3.Delete CS" << endl;
 		int edit;
@@ -274,7 +273,7 @@ void EditComSt(unordered_map<int, ComSt>& cs_group) {
 				cout << cs_group;
 				cout << "Enter the number of cs you want to edit" << endl;
 				int y;
-				y = getcorrectnumber(1, (int)cs_group.size());
+				y = getcorrectnumber(1, INT_MAX);
 				cout << "Enter idetifiers of CSs" << endl;
 				for (int i = 0; idw.size() < y; i++) {
 					cin >> x;
@@ -291,9 +290,21 @@ void EditComSt(unordered_map<int, ComSt>& cs_group) {
 			}
 
 			else {
+				unordered_set <int> id_group;
+				int number;
 				auto idcs = search_cs(cs_group);
 				if (idcs.size() != 0) {
-					for (auto& i : idcs)
+					cout << idcs << endl;
+					cout << "Choose number of identifiers of pipes you want to edit" << endl;
+					number = getcorrectnumber(1, (int)idcs.size());
+					for (int i = 0; id_group.size() < number; i++) {
+						id = getcorrectnumber(0, INT_MAX);
+						if (idcs.find(id) != idcs.end())
+							id_group.insert(id);
+						else
+							cout<<"There is no such cs"<<endl;
+					}
+					for (auto& i : id_group)
 						cs_group[i].edit_ComSt();
 				}
 

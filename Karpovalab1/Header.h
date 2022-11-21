@@ -61,11 +61,11 @@ unordered_set <int> search_p_by_parametr(unordered_map <int, Pipe>& pipe_group, 
 
 
 template <typename T>
-vector <int> search_cs_by_parametr(unordered_map <int, ComSt>& cs_group, filter_cs<T> f, T par) {
-	vector <int> id;
+unordered_set <int> search_cs_by_parametr(unordered_map <int, ComSt>& cs_group, filter_cs<T> f, T par) {
+	unordered_set <int> id;
 	for (auto& cs : cs_group) {
 		if (f(cs.second, par))
-			id.push_back(cs.second.get_idc());
+			id.insert(cs.second.get_idc());
 	}
 	return id;
 }
