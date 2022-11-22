@@ -10,7 +10,7 @@
 
 using namespace std;
 
-int ComSt::max_idcs = 0;
+int ComSt::max_idcs = 1;
 
 istream& operator>>(istream& in, ComSt& cs) {
 	cout << "\n Index of ComSt " << cs.idcomst;

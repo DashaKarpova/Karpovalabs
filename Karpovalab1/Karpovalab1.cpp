@@ -135,8 +135,34 @@ void EditPipes(unordered_map<int, Pipe>& pipe_group) {
 								}
 							}
 						}
+						
 						else
 						{
+							cout << "Enter idntifiers of pipes you want to edit" << endl;
+							id = -1;
+							int i = 0;
+							while ((i < (int)idp.size()) || (id != -2)) {
+								
+								id = getcorrectnumber(-2, INT_MAX);
+								if (idp.find(id) != idp.end())
+									id_group.insert(id);
+								else
+								{
+									cout << "There is no such pipe" << endl;;
+								}
+							}
+							cout << "Enter new status (0 if repairing, 1 if works)" << endl;
+							if (id_group.size() != 0) {
+								bool s;
+								s = getcorrectnumber(0, 1);
+								for (auto& i : id_group) {
+									pipe_group[i].status = s;
+								}
+							}
+						}
+
+						/*else
+						 {
 							cout << "Choose number of identifiers of pipes you want to edit" << endl;
 							number = getcorrectnumber(1, (int)idp.size());
 							for (int i = 0; id_group.size() < number; i++)
@@ -159,7 +185,7 @@ void EditPipes(unordered_map<int, Pipe>& pipe_group) {
 									pipe_group[i].status = s;
 								}
 							}
-						}
+						}*/
 			}
 
 			else {

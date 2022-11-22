@@ -12,7 +12,7 @@ string Pipe:: outputstatus() {
 	return status ? "works" : "is repearing";
 }
 
-int Pipe::max_id = 0;
+int Pipe::max_id = 1;
 
 istream& operator>> (istream& in, Pipe& p) {
 	cout << "\n Index of pipe" << p.idpipe;
