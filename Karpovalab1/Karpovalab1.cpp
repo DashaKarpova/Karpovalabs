@@ -104,7 +104,7 @@ void EditPipes(unordered_map<int, Pipe>& pipe_group) {
 		if (edit == 1) {
 			cout << "1.Choose pipe to edit" << endl;
 			cout << pipe_group;
-			int id = getcorrectnumber(0, (int)pipe_group.size());
+			int id = getcorrectnumber(0, INT_MAX);
 			if (pipe_group.find(id) != pipe_group.end()) {
 				pipe_group[id].edit_Pipe();
 				cout << "Pipe was edited" << endl;
@@ -122,29 +122,44 @@ void EditPipes(unordered_map<int, Pipe>& pipe_group) {
 				auto idp = search_p(pipe_group);
 					if (idp.size() != 0) {
 						cout << idp << endl;
-						cout << "Choose number of identifiers of pipes you want to edit" << endl;
-						number = getcorrectnumber(1, (int)idp.size());
-						for (int i = 0; id_group.size() < number; i++)
+						cout << "Choose pipes to edit, 1- all pipes, 2- some pipes" << endl;
+						int a = getcorrectnumber(1, 2);
+						if (a == 1)
 						{
-							id = getcorrectnumber(0, INT_MAX);
-							if (idp.find(id) != idp.end())
-								id_group.insert(id);
-							else
+							cout << "Enter new status (0 if repairing, 1 if works)" << endl;
+							if (idp.size() != 0) {
+								bool s;
+								s = getcorrectnumber(0, 1);
+								for (auto& i : idp) {
+									pipe_group[i].status = s;
+								}
+							}
+						}
+						else
+						{
+							cout << "Choose number of identifiers of pipes you want to edit" << endl;
+							number = getcorrectnumber(1, (int)idp.size());
+							for (int i = 0; id_group.size() < number; i++)
 							{
-								cout << "There is no such pipe" << endl;;
+								id = getcorrectnumber(0, INT_MAX);
+								if (idp.find(id) != idp.end())
+									id_group.insert(id);
+								else
+								{
+									cout << "There is no such pipe" << endl;;
+								}
+
 							}
 
-						}
-							
 							cout << "Enter new status (0 if repairing, 1 if works)" << endl;
-							if (id_group.size()!=0){ 
+							if (id_group.size() != 0) {
 								bool s;
 								s = getcorrectnumber(0, 1);
 								for (auto& i : id_group) {
-										pipe_group[i].status = s;
+									pipe_group[i].status = s;
+								}
 							}
-							}	
-						
+						}
 			}
 
 			else {
@@ -258,11 +273,13 @@ void EditComSt(unordered_map<int, ComSt>& cs_group) {
 			int id;
 			cout << cs_group;
 			cout << "Choose CS to edit" << endl;
-			id = getcorrectnumber(0, (int)cs_group.size());
+			id = getcorrectnumber(0, INT_MAX);
 			if (cs_group.find(id) != cs_group.end()) {
 				cs_group[id].edit_ComSt();
 				cout << "compressor_station was edited";
 			}
+			else
+				cout << "There is no such cs" << endl;
 		}
 		if (edit == 2) {
 			unordered_set <int> idw;
@@ -295,17 +312,26 @@ void EditComSt(unordered_map<int, ComSt>& cs_group) {
 				auto idcs = search_cs(cs_group);
 				if (idcs.size() != 0) {
 					cout << idcs << endl;
-					cout << "Choose number of identifiers of pipes you want to edit" << endl;
-					number = getcorrectnumber(1, (int)idcs.size());
-					for (int i = 0; id_group.size() < number; i++) {
-						id = getcorrectnumber(0, INT_MAX);
-						if (idcs.find(id) != idcs.end())
-							id_group.insert(id);
-						else
-							cout<<"There is no such cs"<<endl;
+					cout << "Choose cs to edit 1- all css, 2- some css" << endl;
+					int a = getcorrectnumber(1, 2);
+					if (a == 1)
+					{
+						for (auto& i : idcs)
+							cs_group[i].edit_ComSt();
 					}
-					for (auto& i : id_group)
-						cs_group[i].edit_ComSt();
+					else {
+						cout << "Choose number of identifiers of pipes you want to edit" << endl;
+						number = getcorrectnumber(1, (int)idcs.size());
+						for (int i = 0; id_group.size() < number; i++) {
+							id = getcorrectnumber(0, INT_MAX);
+							if (idcs.find(id) != idcs.end())
+								id_group.insert(id);
+							else
+								cout << "There is no such cs" << endl;
+						}
+						for (auto& i : id_group)
+							cs_group[i].edit_ComSt();
+					}
 				}
 
 				else {
