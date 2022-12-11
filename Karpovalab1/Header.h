@@ -59,7 +59,6 @@ unordered_set <int> search_p_by_parametr(unordered_map <int, Pipe>& pipe_group, 
 }
 
 
-
 template <typename T>
 unordered_set <int> search_cs_by_parametr(unordered_map <int, ComSt>& cs_group, filter_cs<T> f, T par) {
 	unordered_set <int> id;
